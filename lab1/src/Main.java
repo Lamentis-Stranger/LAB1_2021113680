@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import graph.Graph;
@@ -33,7 +34,7 @@ public class Main {
                         generateNewText(reader, graph);
                         break;
                     case "4":
-                        //calculateShortestPath(reader, graph);
+                        calculateShortestPath(reader, graph);
                         break;
                     case "5":
                         performRandomWalk(reader, graph);
@@ -117,9 +118,31 @@ public class Main {
         System.out.println(newText.toString());
     }
 
+    private static void calculateShortestPath(BufferedReader reader, Graph graph) throws IOException {
+        System.out.println("请输入一个或两个单词，以计算最短路径：");
+        String line = reader.readLine().toLowerCase();
+        String[] words = line.trim().split("\\s+");
+        if(words.length==1){
+            Map<String, List<String>> allPaths = graph.dijkstraAllPaths(words[0]);
+            allPaths.forEach((key, value) -> System.out.println("Path to " + key + ": " + String.join(" -> ", value)));
+        }
+        else if(words.length==2){
+            List<String> path=graph.dijkstraShortestPath(words[0], words[1]);
+            if (path.isEmpty()) {
+                System.out.println("No path exists between " + words[0] + " and " + words[1]);
+            } else {
+                System.out.println("Shortest path from " + words[0] + " to " + words[1] + ": " + String.join(" -> ", path));
+            }
+        }
+        else{
+            System.out.println("invalied input!");
+        }
+
+    }
+
     private static void performRandomWalk(BufferedReader reader, Graph graph){
         String randomPath = graph.randomWalk();
-        //System.out.println(randomPath);test
+        //System.out.println(randomPath);text
         try {
             FileWriter writer = new FileWriter("path");
             writer.write(randomPath);
