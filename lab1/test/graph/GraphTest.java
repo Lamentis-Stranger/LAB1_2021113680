@@ -5,7 +5,7 @@ import preprocess.TextFileProcessor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraphTestBlack {
+class TestGraphBlack {
 
     @Test
     public void testcase1() {
