@@ -1,17 +1,27 @@
+package main;
 
+import graph.Graph;
+import graph.GraphVisualizer;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import graph.Graph;
-import graph.GraphVisualizer;
 import preprocess.TextFileProcessor;
 
+
+/**2024.06.12
+ * 这是Main类的描述。
+ * 提供菜单选项，并完成各个功能的前置处理。
+ */
 public class Main {
+    /**2024.06.12
+     * 这是Main函数的描述。
+     * 提供菜单选项，并完成各个功能的前置处理。
+     */
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String filePath = getFilePath(args, reader);
@@ -28,7 +38,7 @@ public class Main {
                         showDirectedGraph(graph);
                         break;
                     case "2":
-                        BridgeWordsQuery(reader, graph);
+                        bridgeWordsQuery(reader, graph);
                         break;
                     case "3":
                         generateNewText(reader, graph);
@@ -44,7 +54,9 @@ public class Main {
                         System.out.println("Exit Successful");
                         break;
                     default:
-                        System.out.println("Invalid choice. Please enter a number between 1 and 6.");
+                        System.out.println("Invalid choice. Please enter a number between"
+                                +
+                                " 1 and 6.");
                 }
             }
         } catch (Exception e) {
@@ -81,7 +93,7 @@ public class Main {
         System.out.println("Graph visualized and saved as outputGraph.png");
     }
 
-    private static void BridgeWordsQuery(BufferedReader reader, Graph graph) throws IOException {
+    private static void bridgeWordsQuery(BufferedReader reader, Graph graph) throws IOException {
         System.out.println("请输入两个单词，以查找桥接词（word1 word2）:");
         String[] words = reader.readLine().toLowerCase().split("\\s+");
         if (words.length >= 2) {
@@ -89,8 +101,7 @@ public class Main {
             String word2 = words[1];
             String result = graph.queryBridgeWords(word1, word2);
             System.out.println(result);
-        }
-        else{
+        } else {
             System.out.println("请输入两个有效的单词！");
         }
     }
@@ -98,13 +109,14 @@ public class Main {
     private static void generateNewText(BufferedReader reader, Graph graph) throws IOException {
         System.out.println("请输入一行文本，程序将根据桥接词生成新文本:");
         //String inputText = reader.readLine().toLowerCase();
-        String inputText = reader.readLine();
+        String inputText = reader.readLine(); // 这里没有检查 line 是否为 null
+        System.out.println(inputText.length()); // 如果 line 为 null，这里会抛出 NullPointerException
         String[] words = inputText.split("\\s+");
         StringBuilder newText = new StringBuilder();
         Random random = new Random();
-        for (int i = 0; i < words.length-1; i++) {
+        for (int i = 0; i < words.length - 1; i++) {
             newText.append(words[i]).append(" ");
-            List<String> bridges = graph.BridgeWordsResult(words[i], words[i+1]);
+            List<String> bridges = graph.BridgeWordsResult(words[i], words[i + 1]);
             if (!bridges.isEmpty()) {
                 // 如果存在多个桥接词，随机选择一个插入
                 String bridgeWord = bridges.get(random.nextInt(bridges.size()));
@@ -122,36 +134,48 @@ public class Main {
         System.out.println("请输入一个或两个单词，以计算最短路径：");
         String line = reader.readLine().toLowerCase();
         String[] words = line.trim().split("\\s+");
-        if(words.length==1){
+        if (words.length == 1) {
             Map<String, List<String>> allPaths = graph.dijkstraAllPaths(words[0]);
-            allPaths.forEach((key, value) -> System.out.println("Path to " + key + ": " + String.join(" -> ", value)));
-        }
-        else if(words.length==2){
-            List<String> path=graph.dijkstraShortestPath(words[0], words[1]);
+            allPaths.forEach((key, value) -> System.out.println("Path to " + key + ": "
+                    +
+                    String.join(" -> ", value)));
+        } else if (words.length == 2) {
+            List<String> path = graph.dijkstraShortestPath(words[0], words[1]);
             if (path.isEmpty()) {
                 System.out.println("No path exists between " + words[0] + " and " + words[1]);
             } else {
-                System.out.println("Shortest path from " + words[0] + " to " + words[1] + ": " + String.join(" -> ", path));
+                System.out.println("Shortest path from " + words[0] + " to " + words[1]
+                        +
+                        ": " + String.join(" -> ", path));
             }
-        }
-        else{
+        } else {
             System.out.println("invalied input!");
         }
 
     }
 
-    private static void performRandomWalk(BufferedReader reader, Graph graph){
+    private static void performRandomWalk(BufferedReader reader, Graph graph) {
         String randomPath = graph.randomWalk();
-        //System.out.println(randomPath);text
+        //System.out.println(randomPath);test
         try {
             FileWriter writer = new FileWriter("path");
             writer.write(randomPath);
             writer.close();
             System.out.println("\nPath have been saved");
         } catch (IOException e) {
+            System.out.println("aaavrnivfabu");
             System.err.println("Error writing path to file: " + e.getMessage());
         }
     }
 
 
+
+    //private stastic void
+    //<<<<<<< HEAD
+    //这是第二次修改
+    //这是第二次修改
+    //=======
+    //B2的修改//>>>>>>> B2
 }
+//这是B1分支上做的修改
+//这是IDEA上的修改
