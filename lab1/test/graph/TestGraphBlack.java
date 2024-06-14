@@ -34,6 +34,4 @@ class TestGraphBlack {
         assertEquals("No to or  in the graph!",
                 graph.queryBridgeWords("to",""));
     }
-
-
 }
